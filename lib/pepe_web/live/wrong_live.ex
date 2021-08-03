@@ -28,9 +28,10 @@ defmodule PepeWeb.WrongLive do
       <%= @message %>
     </h2>
     <pre>
-    <%= @user.email %>
-    <%= @session_id %>
-    </preh3>
+    username: <%= @user.username %>
+    email: <%= @user.email %>
+    session id: <%= @session_id %>
+    </pre>
     """
   end
 

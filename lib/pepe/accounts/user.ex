@@ -4,6 +4,7 @@ defmodule Pepe.Accounts.User do
 
   @derive {Inspect, except: [:password]}
   schema "users" do
+    field :username, :string
     field :email, :string
     field :password, :string, virtual: true
     field :hashed_password, :string
@@ -31,9 +32,19 @@ defmodule Pepe.Accounts.User do
   """
   def registration_changeset(user, attrs, opts \\ []) do
     user
-    |> cast(attrs, [:email, :password])
+    |> cast(attrs, [:username, :email, :password])
+    |> validate_username()
     |> validate_email()
     |> validate_password(opts)
+  end
+
+  defp validate_username(changeset) do
+    changeset
+    |> validate_required([:username])
+    |> validate_format(:username, ~r/^[^\s]+$/, message: "no spaces allowed")
+    |> validate_length(:username, max: 20)
+    |> unsafe_validate_unique(:username, Pepe.Repo)
+    |> unique_constraint(:username)
   end
 
   defp validate_email(changeset) do
