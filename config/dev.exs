@@ -30,6 +30,8 @@ config :pepe, PepeWeb.Endpoint,
     ]
   ]
 
+config :pepe, Pepe.Mailer, adapter: Swoosh.Adapters.Local
+
 # ## SSL Support
 #
 # In order to use HTTPS in development, a self-signed

@@ -18,7 +18,7 @@ defmodule PepeWeb.UserSessionControllerTest do
 
     test "redirects if already logged in", %{conn: conn, user: user} do
       conn = conn |> log_in_user(user) |> get(Routes.user_session_path(conn, :new))
-      assert redirected_to(conn) == "/"
+      assert redirected_to(conn) == "/guess"
     end
   end
 
@@ -26,14 +26,18 @@ defmodule PepeWeb.UserSessionControllerTest do
     test "logs the user in", %{conn: conn, user: user} do
       conn =
         post(conn, Routes.user_session_path(conn, :create), %{
-          "user" => %{"email" => user.email, "password" => valid_user_password()}
+          "user" => %{
+            "username" => user.username,
+            "email" => user.email,
+            "password" => valid_user_password()
+          }
         })
 
       assert get_session(conn, :user_token)
       assert redirected_to(conn) =~ "/"
 
       # Now do a logged in request and assert on the menu
-      conn = get(conn, "/")
+      conn = get(conn, "/guess")
       response = html_response(conn, 200)
       assert response =~ user.email
       assert response =~ "Settings</a>"
@@ -44,6 +48,7 @@ defmodule PepeWeb.UserSessionControllerTest do
       conn =
         post(conn, Routes.user_session_path(conn, :create), %{
           "user" => %{
+            "username" => user.username,
             "email" => user.email,
             "password" => valid_user_password(),
             "remember_me" => "true"
@@ -60,6 +65,7 @@ defmodule PepeWeb.UserSessionControllerTest do
         |> init_test_session(user_return_to: "/foo/bar")
         |> post(Routes.user_session_path(conn, :create), %{
           "user" => %{
+            "username" => user.username,
             "email" => user.email,
             "password" => valid_user_password()
           }
@@ -71,7 +77,11 @@ defmodule PepeWeb.UserSessionControllerTest do
     test "emits error message with invalid credentials", %{conn: conn, user: user} do
       conn =
         post(conn, Routes.user_session_path(conn, :create), %{
-          "user" => %{"email" => user.email, "password" => "invalid_password"}
+          "user" => %{
+            "username" => user.username,
+            "email" => user.email,
+            "password" => "invalid_password"
+          }
         })
 
       response = html_response(conn, 200)

@@ -21,5 +21,7 @@ config :pepe, PepeWeb.Endpoint,
   http: [port: 4002],
   server: false
 
+config :pepe, Pepe.Mailer, adapter: Swoosh.Adapters.Test
+
 # Print only warnings and errors during test
 config :logger, level: :warn

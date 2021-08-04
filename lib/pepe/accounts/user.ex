@@ -4,11 +4,11 @@ defmodule Pepe.Accounts.User do
 
   @derive {Inspect, except: [:password]}
   schema "users" do
-    field :username, :string
-    field :email, :string
-    field :password, :string, virtual: true
-    field :hashed_password, :string
-    field :confirmed_at, :naive_datetime
+    field(:username, :string)
+    field(:email, :string)
+    field(:password, :string, virtual: true)
+    field(:hashed_password, :string)
+    field(:confirmed_at, :naive_datetime)
 
     timestamps()
   end
@@ -42,7 +42,7 @@ defmodule Pepe.Accounts.User do
     changeset
     |> validate_required([:username])
     |> validate_format(:username, ~r/^[^\s]+$/, message: "no spaces allowed")
-    |> validate_length(:username, max: 20)
+    |> validate_length(:username, max: 30)
     |> unsafe_validate_unique(:username, Pepe.Repo)
     |> unique_constraint(:username)
   end
