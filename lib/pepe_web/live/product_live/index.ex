@@ -6,7 +6,10 @@ defmodule PepeWeb.ProductLive.Index do
 
   @impl true
   def mount(_params, _session, socket) do
-    {:ok, assign(socket, :products, list_products())}
+    {:ok,
+     socket
+     |> assign(:greeting, "Welcome to THE catalog")
+     |> assign(:products, list_products())}
   end
 
   @impl true

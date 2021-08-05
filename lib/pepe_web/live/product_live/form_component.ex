@@ -11,6 +11,7 @@ defmodule PepeWeb.ProductLive.FormComponent do
      socket
      |> assign(assigns)
      |> assign(:changeset, changeset)}
+    |> IO.inspect()
   end
 
   @impl true

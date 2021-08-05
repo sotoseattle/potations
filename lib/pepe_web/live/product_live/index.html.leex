@@ -9,6 +9,10 @@
     return_to: Routes.product_index_path(@socket, :index) %>
 <% end %>
 
+<h1>
+  <%= @greeting %>
+</h1>
+
 <table>
   <thead>
     <tr>
@@ -23,13 +27,20 @@
   <tbody id="products">
     <%= for product <- @products do %>
       <tr id="product-<%= product.id %>">
-        <td><%= product.name %></td>
+        <!-- assignment 4.2: make the product name the link to show, without reload
+          <td><%= product.name %></td>
+        -->
+        <td>
+          <%= live_patch "#{product.name}", to: Routes.product_show_path(@socket, :show, product) %>
+        </td>
         <td><%= product.unit_price %></td>
         <td><%= product.description %></td>
         <td><%= product.sku %></td>
 
         <td>
+        <!-- assignment 4.2: make the product name the link to show, without reload
           <span><%= live_redirect "Show", to: Routes.product_show_path(@socket, :show, product) %></span>
+        -->
           <span><%= live_patch "Edit", to: Routes.product_index_path(@socket, :edit, product) %></span>
           <span><%= link "Delete", to: "#", phx_click: "delete", phx_value_id: product.id, data: [confirm: "Are you sure?"] %></span>
         </td>
